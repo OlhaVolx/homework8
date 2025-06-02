@@ -11,7 +11,9 @@ jobs:
           command: chmod 777  /root
       - run:
           name: Update dependencies
-          command: apt update && apt upgrade -y
+          command: |
+            apt-get update --fix-missing
+            apt-get upgrade -y --fix-missing
       - run:
           name: Install libs
           command: apt-get install libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb -y

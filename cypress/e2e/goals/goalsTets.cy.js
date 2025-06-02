@@ -229,6 +229,7 @@ describe('CheckCRUD lifecycle for goals', () => {
             })
         })
     })
+
     it('Send Get Goal request with invalid token  ', () => {
 
         // 1. Створення цілі

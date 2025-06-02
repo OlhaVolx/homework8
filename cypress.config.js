@@ -1,15 +1,18 @@
 import { defineConfig } from "cypress";
 
-
 export default defineConfig({
   e2e: {
     env: {
       API_URL: "https://api.clickup.com/api/v2",
-      TEAM_ID: "90151218231",
-      TOKEN: "pk_200434380_RZKCSHSPV4593XTRTU5P7UCT2RRT3FVY",
+      TEAM_ID: "90151244811",
+      TOKEN: "pk_200540491_JF747JSA50120BFLS6W7U8ETGOF9HG9V",
+      allureLogCypress: false,
+      allureReuseAfterSpec: true,
     },
-    setupNodeEvents(on, config) {
-      // implement node event listeners here
+    async setupNodeEvents(on, config) {
+      const allureWriter = (await import('@shelex/cypress-allure-plugin/writer.js')).default;
+      allureWriter(on, config);
+      return config;
     },
   },
 });

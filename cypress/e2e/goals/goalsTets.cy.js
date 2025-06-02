@@ -1,4 +1,6 @@
 import {faker} from '@faker-js/faker';
+import {createGoal} from "../../../modules/goals.js";
+import '@shelex/cypress-allure-plugin';
 
 describe('CheckCRUD lifecycle for goals', () => {
     let goalId = null;// Створює змінну goalId та одразу присвоює їй значення null. Це потрібно для того, щоб оголосити змінну до початку тесту,а потім у процесі тесту (наприклад, після створення нової цілі через API)зберегти у цю змінну ідентифікатор (id) створеної цілі.
@@ -9,12 +11,14 @@ describe('CheckCRUD lifecycle for goals', () => {
     it('Send Get request and return 200 code', () => {
 
         // 1. Створення цілі
-        cy.createGoal().then((response) => {
+        cy.allure().step('Створення цілі через API');
+        createGoal().then((response) => {
             expect(response.status).to.eq(200);
             console.log('Create goal response:', response.body);
             goalId = response.body.goal.id;
 
             // 2. Перевірка, що ціль створена
+            cy.allure().step('Перевірка наявності цілі');
             cy.sendRequest(`/team/${TEAM_ID}/goal`, 'GET').then((getResponse) => {
                 expect(getResponse.status).to.eq(200);
                 const found = getResponse.body.goals.some(g => g.id === goalId);
@@ -25,16 +29,19 @@ describe('CheckCRUD lifecycle for goals', () => {
 // g => g.id === goalId - Це стрілкова (arrow) функція. g — це кожен елемент масиву goals (тобто одна ціль).=> — означає «повернути те, що написано справа».g.id === goalId — перевіряє, чи id цієї цілі дорівнює шуканому id (goalId).=== — оператор суворої рівності (перевіряє і тип, і значення).
 
                 // 3. Оновлення цілі
+                cy.allure().step('Оновлення цілі');
                 cy.updateGoal(goalId, {name: faker.internet.username()})
                     .then((updateResponse) => {
                         expect(updateResponse.status).to.eq(200);
 
 
                         // 4. Видалення цілі
+                        cy.allure().step('Видалення цілі');
                         cy.deleteGoal(goalId).then((deleteResponse) => {
                             expect(deleteResponse.status).to.eq(200);
 
                             // 5. Перевірка, що ціль видалена
+                            cy.allure().step('Перевірка, що ціль видалена');
                             cy.sendRequest(`/goal/${goalId}`, 'GET', null, {failOnStatusCode: false}).then((deletedGoalResponse) => {
                                 expect(deletedGoalResponse.status).to.eq(404);
                             });

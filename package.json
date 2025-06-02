@@ -11,6 +11,8 @@
   "private": true,
   "devDependencies": {
     "@faker-js/faker": "^9.8.0",
+    "allure-commandline": "^2.30.0",
+    "allure-cypress": "^3.0.5",
     "cypress": "^14.4.0",
     "cypress-dotenv": "^3.0.1"
   }
